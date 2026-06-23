@@ -1,0 +1,30 @@
+Read:
+
+* .github/copilot-instructions.md
+* .github/contexts/upload-cv.context.md
+
+Analyze the current codebase.
+
+Tasks:
+
+1. Review the existing FastAPI application.
+2. Review PostgreSQL integration.
+3. Review SQLAlchemy configuration.
+4. Review MinIO integration.
+5. Identify missing components required for Upload CV.
+6. Design the Upload CV feature.
+
+Use the existing codebase as the source of truth.
+
+Output:
+
+* Current state analysis
+* Architecture review
+* Missing components
+* Database review
+* API design
+* Folder structure
+* Data flow
+
+Do not generate implementation code.
+Do not modify any files.
