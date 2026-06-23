@@ -1,30 +1,113 @@
 Read:
 
-* .github/copilot-instructions.md
-* .github/contexts/upload-cv.context.md
+* .github/contexts/upload-cv/backend.context.md
 
-Analyze the current codebase.
+Act as a Senior Backend Engineer.
 
-Tasks:
+The project already contains:
 
-1. Review the existing FastAPI application.
-2. Review PostgreSQL integration.
-3. Review SQLAlchemy configuration.
-4. Review MinIO integration.
-5. Identify missing components required for Upload CV.
-6. Design the Upload CV feature.
+* FastAPI
+* PostgreSQL
+* SQLAlchemy
+* MinIO
+* Docker Compose
 
-Use the existing codebase as the source of truth.
+Use existing infrastructure.
 
-Output:
+Do not recreate infrastructure.
 
-* Current state analysis
-* Architecture review
-* Missing components
-* Database review
-* API design
-* Folder structure
-* Data flow
+Do not introduce new frameworks.
 
-Do not generate implementation code.
-Do not modify any files.
+---
+
+Architecture Rules
+
+Follow:
+
+Router
+→ Service
+→ Repository
+→ Storage
+
+Responsibilities:
+
+Router:
+
+* HTTP concerns only
+
+Service:
+
+* business orchestration only
+
+Repository:
+
+* database access only
+
+Storage:
+
+* MinIO access only
+
+Do not merge responsibilities.
+
+---
+
+Code Quality Rules
+
+* Prefer small files.
+* Prefer single responsibility.
+* Avoid large files.
+* Target under 100 lines per file whenever practical.
+
+---
+
+Execution Process
+
+Phase 1 — Analysis
+
+Provide:
+
+1. Current state analysis
+2. Required changes
+3. Proposed architecture
+4. File structure
+5. Responsibility of each file
+6. Dependency flow
+7. Runtime validation plan
+
+Do not write code.
+
+Wait for approval.
+
+---
+
+Phase 2 — Implementation
+
+Implement one todo at a time.
+
+For each todo:
+
+1. Create file
+2. Show complete code
+3. Explain responsibility
+4. Wait for review
+
+Do not continue automatically.
+
+---
+
+Phase 3 — Validation
+
+Review implementation.
+
+Validate:
+
+* architecture compliance
+* database integration
+* MinIO integration
+* Docker integration
+* API behavior
+* runtime risks
+
+Do not mark complete until runtime validation succeeds.
+
+Build success is not sufficient.

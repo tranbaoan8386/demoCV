@@ -1,44 +1,105 @@
 Read:
 
-* .github/copilot-instructions.md
 * .github/contexts/upload-cv/frontend.context.md
 
-Implement Upload CV frontend feature.
+Act as a Senior React Engineer.
 
-Architecture requirements:
+The backend already exists.
 
-* Follow feature-based architecture.
-* Follow Page → Hook → Service → Component separation.
-* Keep files small and focused.
-* Prefer creating more small files over fewer large files.
-* Do not place business logic inside React components.
-* Do not place API calls inside React components.
-* Do not place API calls inside hooks.
-* Service layer is responsible for API communication only.
-* Hook layer is responsible for state management and orchestration.
-* Component layer is responsible for rendering only.
+Use the real backend API.
 
-File size constraints:
+Do not use mock data.
 
-* Prefer files under 150 lines.
-* If a file exceeds 200 lines, split responsibilities into additional files.
-* Create separate TypeScript types/interfaces files when appropriate.
-* Create separate API service files.
-* Create separate custom hooks.
-* Create separate UI components.
+---
 
-Implementation process:
+Architecture Rules
 
-1. Analyze requirements.
-2. Propose folder structure.
-3. Propose component structure.
-4. Propose hook structure.
-5. Propose service structure.
-6. Explain responsibilities of each file.
+Follow:
 
-Do not generate code yet.
+Page
+→ Hook
+→ Service
 
-Wait for approval before implementation.
- 
+Components:
 
+UI rendering only
 
+Hooks:
+
+state management and orchestration only
+
+Services:
+
+HTTP communication only
+
+Do not call APIs inside components.
+
+Do not place business logic inside components.
+
+---
+
+Code Quality Rules
+
+* Prefer small files.
+* Prefer single responsibility.
+* Avoid large files.
+* Target under 100 lines per file whenever practical.
+
+---
+
+Execution Process
+
+Phase 1 — Analysis
+
+Provide:
+
+1. User flow
+2. State design
+3. Component design
+4. Hook design
+5. Service design
+6. File structure
+7. Responsibility table
+8. Runtime testing plan
+
+Do not write code.
+
+Wait for approval.
+
+---
+
+Phase 2 — Implementation
+
+Implement one todo at a time.
+
+For each todo:
+
+1. Create file
+2. Show complete code
+3. Explain responsibility
+4. Wait for review
+
+Do not continue automatically.
+
+---
+
+Phase 3 — Validation
+
+Review implementation.
+
+Validate:
+
+* architecture compliance
+* API integration
+* frontend-backend integration
+* environment configuration
+* CORS requirements
+* runtime risks
+
+Do not mark complete until:
+
+* build succeeds
+* runtime testing succeeds
+* frontend successfully communicates with backend
+
+Build success alone is not sufficient.

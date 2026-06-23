@@ -1,4 +1,4 @@
-# Upload CV Context
+# Upload CV Backend Context
 
 ## Feature Overview
 
@@ -6,29 +6,61 @@ Upload CV allows users to upload PDF resumes into the system.
 
 ## Current System State
 
-Infrastructure already exists:
+Infrastructure already exists and is already configured:
 
-- FastAPI backend is running.
-- PostgreSQL is running in Docker.
-- Database name: cvdb.
-- SQLAlchemy is configured and connected.
-- MinIO is running in Docker.
-- Basic CV model already exists for testing.
+- FastAPI
+- PostgreSQL
+- SQLAlchemy
+- MinIO
+- Docker Compose
 
-Do not create infrastructure from scratch.
+Do not recreate infrastructure.
+
+Do not redesign infrastructure.
+
+Use the existing infrastructure.
+
+---
 
 ## User Flow
 
-1. User selects a PDF file.
-2. User clicks Upload.
-3. Backend validates file type.
-4. Backend uploads file to MinIO.
-5. Backend creates a CV record in PostgreSQL.
-6. Backend returns uploaded file metadata.
+1. User uploads a PDF file.
+2. Backend validates file type.
+3. Backend stores PDF in MinIO.
+4. Backend creates a CV record in PostgreSQL.
+5. Backend returns CV metadata.
+
+---
+
+## API
+
+POST /cvs/upload
+
+Request:
+
+multipart/form-data
+
+Field:
+
+- file
+
+Response:
+
+{
+"id": 1,
+"original_filename": "cv.pdf",
+"object_name": "cvs/uuid-cv.pdf",
+"status": "UPLOADED",
+"created_at": "2026-06-23T10:00:00"
+}
+
+---
 
 ## Database
 
-Table: cvs
+Table:
+
+cvs
 
 Fields:
 
@@ -42,36 +74,29 @@ Status values:
 
 - UPLOADED
 
-## API Requirements
+---
 
-POST /cvs/upload
+## Storage
 
-Request:
+MinIO bucket:
 
-- PDF file
+cvbucket
 
-Response:
+Object path:
 
-- id
-- original_filename
-- object_name
-- status
-- created_at
+cvs/{uuid}-{filename}.pdf
 
-## Technical Requirements
-
-- Use existing FastAPI application.
-- Use existing SQLAlchemy configuration.
-- Use existing PostgreSQL database (cvdb).
-- Use existing MinIO instance.
-- Do not create Docker configuration.
-- Do not create database infrastructure.
+---
 
 ## Non Goals
 
-- No CV parsing.
-- No AI extraction.
-- No candidate profile creation.
-- No background jobs.
+Do not implement:
 
-These features will be implemented in later phases.
+- CV parsing
+- AI extraction
+- Candidate profile generation
+- Matching
+- Background jobs
+- Queue systems
+
+These belong to future phases.

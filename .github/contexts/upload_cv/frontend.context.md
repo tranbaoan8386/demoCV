@@ -2,65 +2,82 @@
 
 ## Feature Overview
 
-Upload CV allows users to upload PDF resumes to the backend system.
+Upload CV allows users to upload PDF resumes through the user interface.
 
-## Existing Backend API
+## Existing Backend
+
+Backend API already exists.
 
 POST /cvs/upload
 
 Request:
 
-- multipart/form-data
-- field name: file
+multipart/form-data
+
+Field:
+
+- file
 
 Response:
 
-- id
-- original_filename
-- object_name
-- status
-- created_at
+{
+"id": 1,
+"original_filename": "cv.pdf",
+"object_name": "cvs/uuid-cv.pdf",
+"status": "UPLOADED",
+"created_at": "2026-06-23T10:00:00"
+}
 
-## Current Frontend Stack
+Use the real backend.
 
-- React
-- TypeScript
-- Vite
+Do not use mock data.
 
-## Architecture Requirements
-
-Use:
-
-- Page Component
-- Custom Hook
-- Service Layer
-- Presentational Components
-
-Keep business logic out of UI components.
+---
 
 ## User Flow
 
 1. User selects a PDF file.
 2. User clicks Upload.
-3. Frontend calls POST /cvs/upload.
+3. Frontend calls backend API.
 4. Show loading state.
-5. Show upload success result.
+5. Show success state.
+6. Show error state.
 
-## Success State
+---
+
+## UI Requirements
 
 Display:
 
-- original_filename
-- status
-- created_at
+- selected filename
+- upload status
+- upload result
+- error message
 
-## Error State
+---
 
-Display upload error message.
+## Technical Stack
+
+- React
+- TypeScript
+- Vite
+- Tailwind CSS
+
+Use:
+
+VITE_API_URL
+
+Do not hardcode backend URLs.
+
+---
 
 ## Non Goals
 
-- No CV List
-- No CV Detail
-- No CV Parsing
-- No AI Extraction
+Do not implement:
+
+- CV List
+- CV Detail
+- CV Parsing
+- AI Extraction
+- Candidate Profile
+- Matching
