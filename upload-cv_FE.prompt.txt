@@ -1,0 +1,44 @@
+Read:
+
+* .github/copilot-instructions.md
+* .github/contexts/upload-cv/frontend.context.md
+
+Implement Upload CV frontend feature.
+
+Architecture requirements:
+
+* Follow feature-based architecture.
+* Follow Page → Hook → Service → Component separation.
+* Keep files small and focused.
+* Prefer creating more small files over fewer large files.
+* Do not place business logic inside React components.
+* Do not place API calls inside React components.
+* Do not place API calls inside hooks.
+* Service layer is responsible for API communication only.
+* Hook layer is responsible for state management and orchestration.
+* Component layer is responsible for rendering only.
+
+File size constraints:
+
+* Prefer files under 150 lines.
+* If a file exceeds 200 lines, split responsibilities into additional files.
+* Create separate TypeScript types/interfaces files when appropriate.
+* Create separate API service files.
+* Create separate custom hooks.
+* Create separate UI components.
+
+Implementation process:
+
+1. Analyze requirements.
+2. Propose folder structure.
+3. Propose component structure.
+4. Propose hook structure.
+5. Propose service structure.
+6. Explain responsibilities of each file.
+
+Do not generate code yet.
+
+Wait for approval before implementation.
+ 
+
+
