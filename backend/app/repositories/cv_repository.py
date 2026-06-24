@@ -11,6 +11,8 @@ class CVRepository:
         session: Session,
         original_filename: str,
         object_name: str,
+        raw_text=None,
+        structured_data=None,
         status: str = "UPLOADED"
     ) -> CV:
         """
@@ -28,7 +30,9 @@ class CVRepository:
         cv = CV(
             original_filename=original_filename,
             object_name=object_name,
-            status=status
+            status=status,
+            raw_text=raw_text,
+            structured_data=structured_data
         )
         session.add(cv)
         session.commit()

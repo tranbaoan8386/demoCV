@@ -4,6 +4,8 @@ from sqlalchemy.orm import Session
 from app.models.cv import CV
 from app.repositories.cv_repository import CVRepository
 from app.storage.minio_storage import MinIOStorage
+from app.services.pdf_parser_service import PDFParserService
+from app.services.cv_parser_service import CVParserService
 
 
 class CVUploadService:
@@ -44,21 +46,34 @@ class CVUploadService:
         # Step 1: Validate file
         self._validate_file(file_content, original_filename)
 
-        # Step 2: Generate unique object name
+        # Step 2: Extract text from PDF
+        raw_text = PDFParserService.extract_text(file_content)
+
+        # Step 2.1: Parse CV data
+        structured_data = CVParserService.parse(raw_text)
+
+        print("========== STRUCTURED DATA ==========")
+        print(structured_data)
+        print("====================================")
+        
+
+        # Step 3: Generate unique object name
         object_name = self._generate_object_name(original_filename)
 
-        # Step 3: Upload to MinIO
+        # Step 4: Upload to MinIO
         try:
             self.storage.upload_file(file_content, object_name)
         except Exception as e:
             raise Exception(f"MinIO upload failed: {str(e)}")
 
-        # Step 4: Save metadata to database
+        # Step 5: Save metadata to database
         try:
             cv = self.repository.create_cv(
                 db_session,
                 original_filename=original_filename,
                 object_name=object_name,
+                raw_text=raw_text,
+                structured_data=structured_data,
                 status="UPLOADED"
             )
             return cv
