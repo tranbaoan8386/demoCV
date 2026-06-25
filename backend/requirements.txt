@@ -9,3 +9,5 @@ minio
 python-dotenv
 
 pymupdf
+
+pytest>=8.0
