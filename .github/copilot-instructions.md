@@ -1,78 +1,31 @@
-# DemoCV1 Project Instructions
+# DemoCV1 AI Instructions
 
-## Project Purpose
+This repository uses a structured AI engineering workflow.
 
-DemoCV1 is a learning project focused on:
+Before starting any implementation, identify the target domain and load the corresponding AI guidance.
 
-- AI Engineering workflows
-- FastAPI backend development
-- PostgreSQL
-- MinIO object storage
-- CV parsing and matching systems
+## Backend
 
-## Development Philosophy
+For all backend-related tasks:
 
-Prefer:
+1. Read `.github/backend/AGENT.md`.
+2. Follow all backend instructions.
+3. Load the required backend skill.
+4. Load the required backend contexts.
+5. Load the current backend task when applicable.
 
-1. Prompt
-2. Context
-3. Skill
-4. Instruction
+Do not begin implementation before understanding the required architecture, project context, and task objective.
 
-Avoid over-engineering.
+## Frontend
 
-Only introduce Skill or Instruction when they provide reusable value.
+Frontend AI guidance will be located under `.github/frontend/`.
 
-## Current Architecture
+Use the frontend AI documentation when implementing frontend features.
 
-Backend:
+## General Principles
 
-- FastAPI
-- SQLAlchemy
-- PostgreSQL
-- MinIO
-
-Frontend:
-
-- React
-- TypeScript
-
-Infrastructure:
-
-- Docker Compose
-
-## Architecture Principles
-
-Use separation of concerns.
-
-Preferred layers:
-
-- API Layer
-- Service Layer
-- Repository Layer
-- Storage Layer
-
-Avoid putting business logic directly in API routes.
-
-## Existing Infrastructure
-
-The following infrastructure already exists:
-
-- PostgreSQL container
-- MinIO container
-- FastAPI application
-- SQLAlchemy configuration
-
-Do not recreate infrastructure unless explicitly requested.
-
-## AI Engineering Workflow
-
-Before implementing a feature:
-
-1. Read project instructions.
-2. Read relevant feature context.
-3. Design the feature.
-4. Validate architecture.
-5. Implement incrementally.
-
-Do not skip design for non-trivial features.
+- Preserve existing architecture.
+- Preserve backward compatibility unless explicitly approved.
+- Follow the established AI engineering workflow.
+- Keep instructions, skills, contexts, and tasks independent.
+- Avoid duplicating information across AI documents.
