@@ -13,7 +13,7 @@ backend/
 ├── instructions/
 ├── skills/
 ├── contexts/
-└── prompts/
+└── taskss/
 ```
 
 Each directory has a distinct responsibility and should not overlap with the others.
@@ -93,13 +93,13 @@ Contexts should evolve as the project evolves.
 
 ---
 
-# Prompts
+# taskss
 
-Prompts define the objective of the current task.
+taskss define the objective of the current task.
 
-Prompts are temporary and task-specific.
+taskss are temporary and task-specific.
 
-Prompts should not duplicate engineering rules, reusable skills, or project contexts.
+taskss should not duplicate engineering rules, reusable skills, or project contexts.
 
 ---
 
@@ -135,5 +135,5 @@ Never:
 - Ignore established instructions.
 - Bypass architectural constraints.
 - Duplicate project knowledge across multiple documents.
-- Mix instructions, skills, contexts, and prompts.
+- Mix instructions, skills, contexts, and tasks.
 - Introduce unnecessary architectural complexity.
