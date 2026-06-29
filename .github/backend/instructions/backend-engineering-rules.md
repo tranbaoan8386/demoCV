@@ -208,6 +208,24 @@ Never expose:
 - Internal stack traces
 
 ---
+# Git Operations
+
+Git operations require explicit user approval.
+
+Unless explicitly requested:
+
+- Do not run `git add`.
+- Do not run `git commit`.
+- Do not run `git push`.
+- Do not create or delete branches.
+- Do not create tags.
+- Do not rewrite Git history.
+
+Complete the implementation, validation, and testing first.
+
+Wait for user review before performing any Git operation.
+
+---
 
 ## Preferred Patterns
 
@@ -254,18 +272,6 @@ When multiple implementation options are available:
 
 ---
 
-# Git
-
-Create focused commits.
-
-One commit should represent one logical change.
-
-Follow the project's commit convention.
-
-Avoid mixing unrelated changes.
-
----
-
 # Working with Existing Code
 
 Before modifying code:
@@ -283,9 +289,10 @@ When implementing a task:
 
 - Understand the problem before coding.
 - Respect existing architecture.
-- Explain important design decisions.
+- Use the project schemas as the source of truth for structured data.
+- Explain important design decisions when introducing non-trivial changes.
 - Avoid assumptions.
 - Ask for clarification if requirements are ambiguous.
 - Produce production-quality code rather than prototype code.
 
-Always prioritize maintainability, correctness, and long-term extensibility.
+Always prioritize maintainability, correctness, consistency, and long-term extensibility.

@@ -2,7 +2,7 @@
 
 This directory contains the AI guidance used for backend development.
 
-All backend development should follow the instructions, skills, and contexts defined in this directory.
+All backend development should follow the instructions, skills, contexts, schemas, and tasks defined in this directory.
 
 ---
 
@@ -13,7 +13,8 @@ backend/
 ├── instructions/
 ├── skills/
 ├── contexts/
-└── taskss/
+├── schemas/
+└── tasks/
 ```
 
 Each directory has a distinct responsibility and should not overlap with the others.
@@ -93,13 +94,39 @@ Contexts should evolve as the project evolves.
 
 ---
 
-# taskss
+# Schemas
 
-taskss define the objective of the current task.
+Schemas define the canonical data structures and semantic rules used by the backend.
 
-taskss are temporary and task-specific.
+Load the required schemas before implementing parser logic or modifying structured outputs.
 
-taskss should not duplicate engineering rules, reusable skills, or project contexts.
+Current schemas:
+
+- structured-output-schema
+- parsing-rules
+
+Schemas define:
+
+- Structured output
+- Field definitions
+- Field ownership
+- Semantic meaning
+- Data constraints
+- Classification rules
+
+Parser implementations must conform to the defined schemas.
+
+Schemas represent the source of truth for structured data.
+
+---
+
+# tasks
+
+tasks define the objective of the current task.
+
+tasks are temporary and task-specific.
+
+tasks should not duplicate engineering rules, reusable skills, or project contexts.
 
 ---
 
@@ -108,15 +135,16 @@ taskss should not duplicate engineering rules, reusable skills, or project conte
 For every backend task:
 
 1. Apply all relevant instructions.
-2. Load the required development skill.
+2. Load the required development skills.
 3. Load the required project contexts.
-4. Understand the task objective.
-5. Analyze the existing implementation.
-6. Design the solution.
-7. Implement the requested changes.
-8. Validate the implementation.
-9. Preserve architectural consistency.
-10. Preserve backward compatibility unless explicitly approved.
+4. Load the required schemas.
+5. Understand the task objective.
+6. Analyze the existing implementation.
+7. Design the solution.
+8. Implement the requested changes.
+9. Validate the implementation.
+10. Preserve architectural consistency.
+11. Preserve backward compatibility unless explicitly approved.
 
 ---
 
@@ -129,11 +157,12 @@ Always:
 - Reuse existing capabilities whenever possible.
 - Maintain consistency across the codebase.
 - Produce production-ready implementations.
+- Follow the canonical data schemas.
 
 Never:
 
 - Ignore established instructions.
 - Bypass architectural constraints.
 - Duplicate project knowledge across multiple documents.
-- Mix instructions, skills, contexts, and tasks.
+- Mix instructions, skills, contexts, schemas, and tasks.
 - Introduce unnecessary architectural complexity.

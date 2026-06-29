@@ -2,13 +2,17 @@
 
 ## Objective
 
-Extend the Candidate Parser to extract additional candidate information while preserving existing parser behavior and architecture.
+Extend the Candidate Parser to extract additional candidate information while preserving the existing parser behavior, architecture, and structured output contract.
+
+The implementation must conform to the canonical structured output schema and parsing rules.
 
 ---
 
-## Scope
+# Scope
 
-The Candidate Parser should extract:
+The Candidate Parser is responsible for extracting candidate-related information only.
+
+Fields within the Candidate section include:
 
 - Name
 - Email
@@ -18,25 +22,42 @@ The Candidate Parser should extract:
 - LinkedIn
 - Portfolio
 
-The structured output should become:
-
-```json
-{
-  "candidate": {
-    "name": "",
-    "email": "",
-    "phone": "",
-    "address": "",
-    "github": "",
-    "linkedin": "",
-    "portfolio": ""
-  }
-}
-```
+The parser must not extract information that belongs to other parser domains.
 
 ---
 
-## Requirements
+# References
+
+This sprint must follow the backend AI guidance.
+
+Required documents:
+
+## Instructions
+
+- backend-engineering-rules.md
+- backend-architecture-rules.md
+
+## Skills
+
+- develop-backend-feature
+- develop-parser
+
+## Contexts
+
+- backend-project
+- parser-architecture
+- roadmap
+
+## Schemas
+
+- structured-output-schema
+- parsing-rules
+
+These documents define the engineering rules, architecture, project context, structured output, and semantic parsing rules.
+
+---
+
+# Requirements
 
 The implementation must:
 
@@ -44,33 +65,37 @@ The implementation must:
 - Preserve backward compatibility.
 - Maintain the current parser architecture.
 - Extend the existing Candidate Parser instead of replacing it.
+- Conform to the structured output schema.
+- Follow the semantic parsing rules.
 - Follow all backend engineering and architecture rules.
 
 ---
 
-## Development Process
+# Development Process
 
-Follow the standard backend feature development workflow:
+Follow the standard backend development workflow.
 
-- Analyze
-- Design
-- Review
-- Approval
-- Implementation
-- Validation
-- Architecture Review
-- Commit
+1. Analyze
+2. Design
+3. Review
+4. Approval
+5. Implementation
+6. Validation
+7. Architecture Review
+8. Commit
 
 Implementation must not begin before the design has been reviewed and approved.
 
 ---
 
-## Expected Deliverables
+# Expected Deliverables
 
 The sprint is complete when:
 
 - Candidate Parser extracts all required fields.
 - Existing extraction behavior is preserved.
+- Structured output conforms to the schema.
+- Parsing behavior conforms to the parsing rules.
 - Required tests pass.
 - Regression tests pass.
 - Parser architecture remains unchanged.
@@ -78,7 +103,7 @@ The sprint is complete when:
 
 ---
 
-## Current Status
+# Current Status
 
 - Analyze: Pending
 - Design: Pending
