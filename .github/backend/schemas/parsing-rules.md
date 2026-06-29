@@ -95,6 +95,63 @@ Examples:
 
 ---
 
+# Skills Rules
+
+## declared
+
+Represents the skills explicitly listed by the candidate in the Skills section.
+
+Extract only skills that appear within the Skills section.
+
+Preserve the order in which the candidate declares the skills.
+
+Do not infer additional skills.
+
+---
+
+## detected
+
+Represents skills detected from other sections of the CV.
+
+Possible sources include:
+
+- Summary
+- Experience
+- Projects
+- Certifications
+
+Do not extract skills from the Skills section into `detected`.
+
+Only include skills that can be confidently identified.
+
+---
+
+## normalized
+
+Represents the normalized skill set used for search, filtering, and matching.
+
+The normalized list is derived from both `declared` and `detected`.
+
+Normalization should:
+
+- Merge `declared` and `detected`.
+- Remove duplicate skills.
+- Convert equivalent skill names to a single canonical search key.
+- Use a consistent format suitable for indexing and matching.
+
+Examples:
+
+- ReactJS → react
+- React.js → react
+- React → react
+- Node.js → nodejs
+- TS → typescript
+- JS → javascript
+
+The normalized list is intended for internal processing rather than preserving the candidate's original wording.
+
+---
+
 # General Rules
 
 Information must be stored in the domain it belongs to.

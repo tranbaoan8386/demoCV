@@ -45,3 +45,47 @@ alice@example.com
     result = CVParserService.parse(raw_text)
     assert result["candidate"] == expected_candidate
     assert CVParser.parse(raw_text)["candidate"] == expected_candidate
+
+
+def test_candidate_parser_ignores_non_portfolio_urls():
+    raw_text = """John Smith
+john.smith@example.com
+https://github.com/johnsmith/project
+https://example.com/demo
+https://docs.example.com/guide
+"""
+
+    expected_candidate = {
+        "name": "John Smith",
+        "email": "john.smith@example.com",
+        "phone": "",
+        "address": "",
+        "github": "",
+        "linkedin": "",
+        "portfolio": "",
+    }
+
+    result = CVParserService.parse(raw_text)
+    assert result["candidate"] == expected_candidate
+    assert CVParser.parse(raw_text)["candidate"] == expected_candidate
+
+
+def test_candidate_parser_normalizes_address_lines():
+    raw_text = """Jane Doe
+jane@example.com
+Address: 123 Main St, District 1, HCMC
+"""
+
+    expected_candidate = {
+        "name": "Jane Doe",
+        "email": "jane@example.com",
+        "phone": "",
+        "address": "123 Main St, District 1, HCMC",
+        "github": "",
+        "linkedin": "",
+        "portfolio": "",
+    }
+
+    result = CVParserService.parse(raw_text)
+    assert result["candidate"] == expected_candidate
+    assert CVParser.parse(raw_text)["candidate"] == expected_candidate
