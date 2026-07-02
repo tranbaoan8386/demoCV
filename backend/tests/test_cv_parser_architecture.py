@@ -15,7 +15,11 @@ def test_cv_parser_preserves_existing_output():
             "linkedin": "",
             "portfolio": "",
         },
-        "skills": [],
+        "skills": {
+            "declared": [],
+            "detected": [],
+            "normalized": [],
+        },
         "education": [],
         "projects": [],
         "experience": [],

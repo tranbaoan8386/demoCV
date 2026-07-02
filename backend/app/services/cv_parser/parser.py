@@ -1,6 +1,6 @@
 from app.services.cv_parser.candidate_parser import CandidateParser
 from app.services.cv_parser.certificate_parser import CertificateParser
-from app.services.cv_parser.education_parser import EducationParser
+from app.services.cv_parser.education import EducationParser
 from app.services.cv_parser.experience_parser import ExperienceParser
 from app.services.cv_parser.language_parser import LanguageParser
 from app.services.cv_parser.project_parser import ProjectParser

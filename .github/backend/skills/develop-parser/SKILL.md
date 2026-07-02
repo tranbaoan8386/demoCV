@@ -50,6 +50,25 @@ Approach parser development by:
 
 ---
 
+# Parser Composition
+
+Complex parsers should be implemented as compositions of smaller parsing components.
+
+Typical parser responsibilities include:
+
+- Section Locator
+- Entry Splitter
+- Field Parsers
+- Output Builder
+
+The top-level parser should coordinate the parsing workflow.
+
+Complex extraction logic should be delegated to dedicated parser components.
+
+Simple parsers may remain in a single source file until additional responsibilities justify decomposition.
+
+---
+
 # Parser Design Principles
 
 Every parser should:
@@ -125,3 +144,5 @@ The completed parser should:
 - Be easy to extend and maintain.
 - Preserve backward compatibility.
 - Be suitable for production use.
+
+---

@@ -66,7 +66,39 @@ Structure:
 
 # Education
 
-Represents educational history.
+## Description
+
+Represents the candidate's educational history.
+
+## Structure
+
+Education is represented as an array of education entries.
+
+Each education entry contains:
+
+```json
+{
+  "institution": "",
+  "degree": "",
+  "major": "",
+  "start_date": "",
+  "end_date": "",
+  "gpa": "",
+  "location": "",
+  "description": ""
+}
+```
+
+## Fields
+
+- institution
+- degree
+- major
+- start_date
+- end_date
+- gpa
+- location
+- description
 
 ---
 

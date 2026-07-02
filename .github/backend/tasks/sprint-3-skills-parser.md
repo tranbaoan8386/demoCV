@@ -29,36 +29,116 @@ The implementation must follow:
 - `structured-output-schema.md`
 - `parsing-rules.md`
 
+## Parsing Flow
+
+The Skills Parser processes candidate skills using the following pipeline:
+
+1. Extract explicitly declared skills from the Skills section.
+2. Detect additional skills from other supported sections.
+3. Remove duplicated skills between declared and detected.
+4. Normalize skill names according to `parsing-rules.md`.
+5. Produce the final structured output.
+
+Pipeline:
+
+Raw CV
+│
+├──────────────┐
+│ │
+Skills Other Sections
+│ │
+declared detected
+│ │
+└───┬────┘
+▼
+normalization
+▼
+normalized
+
 ### declared
 
 Extract skills explicitly listed by the candidate within the **Skills** section.
 
+Rules:
+
+- Only parse the Skills section.
+- Preserve the original spelling.
+- Preserve the original casing.
+- Preserve the original ordering.
+- Do not normalize values in `declared`.
+
 ### detected
 
-Detect skills from other CV sections, including:
+Detect skills from the following sections only:
 
 - Summary
 - Experience
 - Projects
 - Certifications
 
-Do not duplicate skills that already exist in `declared`.
+Rules:
+
+- Never scan the Skills section.
+- Only include skills not already present in `declared`.
+- Preserve the first detected occurrence.
+- Do not normalize values in `detected`.
 
 ### normalized
 
-Produce a normalized skill set derived from both:
+Normalization algorithm:
 
-- declared
-- detected
+1. Combine `declared` and `detected`.
+2. Remove duplicate skills.
+3. Normalize each skill according to `parsing-rules.md`.
+4. Remove duplicates introduced by normalization.
+5. Return the normalized skill list.
 
-Normalization must:
+The normalized output:
 
-- Merge both collections.
-- Remove duplicate skills.
-- Convert equivalent skill names into the normalized identifier defined by the parsing rules.
-- Produce a stable output suitable for search, filtering, and future matching.
+- must be lowercase where defined by the parsing rules;
+- must contain unique values only;
+- must not modify `declared` or `detected`.
 
----
+Normalization Examples
+
+Input
+
+HTML5
+HTML
+
+↓
+
+html
+
+CSS3
+CSS
+
+↓
+
+css
+
+ReactJS
+React.js
+React
+
+↓
+
+react
+
+NodeJS
+Node.js
+Node
+
+↓
+
+nodejs
+
+NextJS
+Next.js
+
+↓
+
+## nextjs
 
 ## Requirements
 
@@ -71,6 +151,24 @@ The implementation must:
 - Follow all backend engineering and architecture rules.
 - Follow the structured output schema exactly.
 - Follow the parsing rules exactly.
+
+---
+
+## Parser Responsibilities
+
+The Skills Parser is responsible only for:
+
+- extracting skills;
+- detecting additional skills;
+- normalizing skill names.
+
+The Skills Parser must not:
+
+- parse education;
+- parse projects;
+- parse experience;
+- modify candidate information;
+- modify parser orchestration.
 
 ---
 
