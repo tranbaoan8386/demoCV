@@ -11,6 +11,7 @@ class CVUploadResponse(BaseModel):
     object_name: str
     status: str
     created_at: datetime
+    cleaned_text: str | None = None
 
     class Config:
         from_attributes = True

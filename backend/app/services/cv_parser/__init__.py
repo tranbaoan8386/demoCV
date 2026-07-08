@@ -1,3 +1,1 @@
-from app.services.cv_parser.parser import CVParser
-
-__all__ = ["CVParser"]
+from .text_cleaner import clean_cv_text

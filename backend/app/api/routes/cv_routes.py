@@ -56,7 +56,8 @@ def upload_cv(
             original_filename=cv.original_filename,
             object_name=cv.object_name,
             status=cv.status,
-            created_at=cv.created_at
+            created_at=cv.created_at,
+            cleaned_text=(cv.structured_data or {}).get("cleaned_text")
         )
 
     except ValueError as e:
