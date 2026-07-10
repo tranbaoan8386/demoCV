@@ -11,3 +11,5 @@ python-dotenv
 pymupdf
 
 pytest>=8.0
+
+google-genai

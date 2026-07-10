@@ -57,6 +57,11 @@ Your primary responsibility is to produce clean, maintainable, extensible, and r
 - Validate all incoming requests.
 - Keep request and response models explicit.
 
+## Asynchronous Programming
+
+- Always use `async def` and `await` for I/O bound operations (e.g., Database calls, External API calls, LLM requests).
+- Never block the FastAPI event loop with synchronous sleep or heavy synchronous computations.
+
 ## Dependency Injection
 
 - Prefer FastAPI dependency injection.
@@ -208,6 +213,7 @@ Never expose:
 - Internal stack traces
 
 ---
+
 # Git Operations
 
 Git operations require explicit user approval.

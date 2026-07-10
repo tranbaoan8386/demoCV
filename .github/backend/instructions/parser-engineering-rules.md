@@ -1,253 +1,66 @@
-# Parser Engineering Rules
+# Parser Engineering Rules (LLM Integration Paradigm)
 
 ## Purpose
 
-This document defines the engineering standards for implementing all parsers in the project.
+This document defines the mandatory engineering standards for AI Agents and human developers when implementing the CV parsing system using AI/LLMs.
 
-These rules ensure that every parser remains maintainable, extensible, testable, and consistent across the entire parsing pipeline.
-
-All parser implementations must follow these rules.
+The goal is to ensure that the system executes secure API calls, guarantees accurate and structured data retrieval, maintains high performance, and remains highly maintainable.
 
 ---
 
-# 1. Parser Responsibilities
+## 1. New Parser Architecture (LLM-Based)
 
-A parser is responsible for transforming unstructured text into structured data.
+The system no longer utilizes fragmented Regex Parsers (such as `DateParser`, `DegreeParser`, etc.). Instead, the architecture is unified and simplified as follows:
 
-A parser must:
-
-- locate the target information;
-- extract supported fields;
-- return structured output defined by the project schema.
-
-A parser must not:
-
-- infer unsupported information;
-- modify unrelated parser outputs;
-- contain business logic unrelated to parsing;
-- modify parser orchestration outside its own responsibility.
-
----
-
-# 2. Parser Architecture
-
-Every parser must follow the same high-level architecture.
-
-```
-Raw Text
+```text
+Raw PDF/Docx
     │
     ▼
-Section Locator
+Text Cleaner (Completed: Removes noise, normalizes text)
     │
     ▼
-Entry Splitter
+LLM Service (Injects the entire cleaned text into the Prompt)
     │
     ▼
-Field Parsers
+Pydantic Validation (Validates the JSON structure returned by LLM)
     │
     ▼
-Structured Output
+Database (Stores the final Structured Data)
 ```
 
-Responsibilities must remain separated.
+---
+
+## 2. LLM Integration Rules
+
+All source code related to LLM integration MUST comply with the following principles:
+
+- **Structured Output:** API calls must be explicitly configured to enforce JSON format returns (e.g., `response_format={ "type": "json_object" }` for OpenAI or `response_mime_type="application/json"` for Gemini).
+- **Strict Validation:** It is mandatory to use `Pydantic` to create data models that map exactly 100% to the schema defined in `llm-extraction-schema.md`. The raw data returned by the LLM MUST pass through Pydantic for validation before being passed to the Controller or Database.
+- **Asynchronous Processing:** All LLM API functions must be implemented using `async def` and `await` to prevent blocking the FastAPI event loop.
+- **Strict Security:** Absolutely no hardcoded API Keys in the source code. Credentials must be loaded from environment variables (e.g., via `.env` files using `os.getenv()` or FastAPI's `BaseSettings`).
 
 ---
 
-# 3. Parser Composition
+## 3. Error Handling & Resilience
 
-The top-level parser is an orchestration layer.
+LLM APIs are prone to network latency, timeouts, and rate limits. The following resilience measures must be implemented:
 
-Its responsibility is limited to:
-
-- locating sections;
-- splitting entries;
-- coordinating field parsers;
-- assembling the final output.
-
-The top-level parser should not contain complex extraction logic.
+- **Exception Wrapping:** Wrap all LLM API calls within `try-except` blocks.
+- **Explicit Logging:** Explicitly catch, handle, and accurately log specific exceptions such as `Timeout`, `RateLimitError`, and `JSONDecodeError`.
+- **Graceful Degradation:** If the LLM returns malformed JSON or fails, the system must log the specific `cleaned_text` for manual inspection and MUST NOT crash the entire application pipeline.
 
 ---
 
-# 4. Single Responsibility
+## 4. File Organization
 
-Each parsing component must have only one responsibility.
+Instead of fragmenting parsing logic across dozens of files, the LLM-based parsing logic should be cleanly consolidated:
 
-Examples:
-
-- Date Parser
-- Institution Parser
-- Degree Parser
-- Major Parser
-- GPA Parser
-
-Each component extracts only its own field.
-
-A component must not extract multiple unrelated fields.
-
----
-
-# 5. Progressive Parsing
-
-Parsing should be performed progressively.
-
-Recommended workflow:
-
-1. Identify the parsing scope.
-2. Split into entries.
-3. Parse fields independently.
-4. Assemble the final object.
-
-Avoid implementing large monolithic parsing functions.
-
----
-
-# 6. Reusable Components
-
-Common parsing logic should be reusable.
-
-Reusable responsibilities include:
-
-- section detection;
-- entry splitting;
-- date parsing;
-- normalization;
-- shared regex utilities.
-
-Duplicate implementations should be avoided.
-
----
-
-# 7. Parser Independence
-
-Each parser must remain independent.
-
-A parser must not:
-
-- call another parser;
-- modify another parser's output;
-- depend on implementation details of another parser.
-
-Parsers communicate only through the parser orchestrator.
-
----
-
-# 8. Scalability
-
-Parser architecture must support incremental extension.
-
-New parsing capabilities should be added by introducing new parsing components instead of modifying existing ones whenever possible.
-
-Architecture should follow the Open/Closed Principle.
-
----
-
-# 9. File Organization
-
-Simple parsers may remain in a single file.
-
-When parsing complexity grows, responsibilities should be separated into dedicated parser components.
-
-Example:
-
+```text
+app/
+ ├── schemas/
+ │   └── cv_schema.py       # Contains Pydantic models mapping to llm-extraction-schema.md
+ ├── services/
+ │   └── llm_service.py     # Contains the core logic for calling OpenAI/Gemini/Claude APIs
+ └── core/
+     └── config.py          # Manages environment variables (API Keys, Model Names, etc.)
 ```
-education/
-
-    education_parser.py
-
-    institution_parser.py
-
-    degree_parser.py
-
-    major_parser.py
-
-    date_parser.py
-
-    gpa_parser.py
-```
-
-The top-level parser remains responsible only for orchestration.
-
----
-
-# 10. Naming Convention
-
-Parser classes should use consistent naming.
-
-Preferred examples:
-
-- CandidateParser
-- SkillParser
-- EducationParser
-- InstitutionParser
-- DegreeParser
-- DateParser
-
-Avoid inconsistent naming such as:
-
-- Detector
-- Resolver
-- Analyzer
-- Manager
-
-unless required by project-wide architecture.
-
----
-
-# 11. Complexity Guidelines
-
-A parser should remain small and readable.
-
-If a parser begins to contain multiple independent extraction responsibilities, those responsibilities should be moved into dedicated parser components.
-
-Large parser files should be decomposed before adding additional functionality.
-
----
-
-# 12. Code Quality
-
-Parser implementations should:
-
-- be deterministic;
-- avoid duplicated parsing logic;
-- avoid duplicated regular expressions;
-- keep methods focused on a single task;
-- preserve backward compatibility whenever possible.
-
----
-
-# 13. Testing
-
-Every parser should be independently testable.
-
-Each parser component should be testable in isolation.
-
-Regression tests should verify that parser changes do not affect existing parsing behavior.
-
----
-
-# 14. Anti-Patterns
-
-Avoid the following:
-
-- monolithic parser classes;
-- duplicated parsing algorithms;
-- duplicated section detection logic;
-- duplicated regular expressions;
-- deeply nested parsing logic;
-- large methods with multiple responsibilities;
-- cross-parser dependencies.
-
----
-
-# 15. Engineering Principle
-
-Parser architecture should prioritize:
-
-- readability;
-- maintainability;
-- extensibility;
-- composability;
-- deterministic behavior;
-- separation of responsibilities.
-
-Parser quality is measured by architecture and maintainability, not by file count.

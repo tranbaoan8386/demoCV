@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Any
 
 from pydantic import BaseModel
 
@@ -11,7 +12,7 @@ class CVUploadResponse(BaseModel):
     object_name: str
     status: str
     created_at: datetime
-    cleaned_text: str | None = None
+    structured_data: dict[str, Any] | None = None
 
     class Config:
         from_attributes = True
