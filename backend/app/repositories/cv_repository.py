@@ -13,7 +13,7 @@ class CVRepository:
         object_name: str,
         raw_text=None,
         structured_data=None,
-        status: str = "UPLOADED"
+        status: str = "PENDING"
     ) -> CV:
         """
         Create a new CV record in the database
@@ -43,3 +43,29 @@ class CVRepository:
     def get_cv(session: Session, cv_id: int) -> CV | None:
         """Get CV by ID"""
         return session.query(CV).filter(CV.id == cv_id).first()
+
+    @staticmethod
+    def update_cv(
+        session: Session,
+        cv_id: int,
+        *,
+        raw_text=None,
+        structured_data=None,
+        status: str | None = None
+    ) -> CV:
+        """Update CV record fields and persist them."""
+        cv = session.query(CV).filter(CV.id == cv_id).first()
+        if cv is None:
+            raise ValueError(f"CV with id={cv_id} was not found")
+
+        if raw_text is not None:
+            cv.raw_text = raw_text
+        if structured_data is not None:
+            cv.structured_data = structured_data
+        if status is not None:
+            cv.status = status
+
+        session.add(cv)
+        session.commit()
+        session.refresh(cv)
+        return cv

@@ -1,8 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.core.database import Base
-from app.core.database import engine
 from app.api.routes.cv_routes import router as cv_router
 
 from app.models.cv import CV
@@ -18,8 +16,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-Base.metadata.create_all(bind=engine)
 
 app.include_router(cv_router)
 

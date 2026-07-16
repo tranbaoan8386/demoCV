@@ -4,7 +4,7 @@ import asyncio
 import json
 import os
 import traceback
-from typing import Any
+from typing import Any, List
 
 from google import genai
 from pydantic import ValidationError
@@ -79,3 +79,49 @@ async def extract_cv_data(cleaned_text: str, timeout_seconds: int = 90) -> CVSch
     except Exception as exc:
         traceback.print_exc() 
         raise RuntimeError(f"Unexpected error while calling Gemini: {str(exc)}") from exc
+
+
+async def generate_embedding(text: str, timeout_seconds: int = 30) -> List[float]:
+    """
+    Generate a 768-dimensional embedding for the given text using Gemini.
+    Returns a list[float] of length 768 on success.
+    """
+    if GEMINI_API_KEY is None:
+        raise RuntimeError("GEMINI_API_KEY must be configured in environment variables")
+
+    try:
+        client = genai.Client(api_key=GEMINI_API_KEY)
+
+        # 1. Cập nhật tên model thành "gemini-embedding-001"
+        # 2. Ép đầu ra về đúng 768 chiều để vượt qua bước check validate của bạn
+        response = await asyncio.wait_for(
+            client.aio.models.embed_content(
+                model="gemini-embedding-001",
+                contents=text,
+                config={"output_dimensionality": 768} 
+            ),
+            timeout=timeout_seconds,
+        )
+
+        # Trích xuất vector embedding chuẩn từ SDK mới
+        embedding_vector = None
+        if hasattr(response, "embedding") and response.embedding:
+            embedding_vector = response.embedding.values
+        elif hasattr(response, "embeddings") and response.embeddings:
+            embedding_vector = response.embeddings[0].values
+
+        if embedding_vector is None:
+            raise RuntimeError("Could not extract embedding from Gemini response")
+
+        # Đảm bảo định dạng kiểu số thực và kiểm tra số chiều (dimension)
+        embedding_vector = [float(x) for x in embedding_vector]
+        if len(embedding_vector) != 768:
+            raise ValueError(f"Unexpected embedding dimension: {len(embedding_vector)}")
+
+        return embedding_vector
+
+    except asyncio.TimeoutError as exc:
+        raise RuntimeError(f"Gemini embedding request timed out after {timeout_seconds}s") from exc
+    except Exception as exc:
+        traceback.print_exc()
+        raise RuntimeError(f"Unexpected error while generating embedding: {str(exc)}") from exc

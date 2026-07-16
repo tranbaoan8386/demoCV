@@ -13,3 +13,7 @@ pymupdf
 pytest>=8.0
 
 google-genai
+
+# Thư viện quản lý Database Migration & kiểu dữ liệu Vector
+alembic
+pgvector

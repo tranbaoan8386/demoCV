@@ -16,3 +16,11 @@ class CVUploadResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class CVUploadAcceptedResponse(BaseModel):
+    """Response schema for the asynchronous upload acceptance flow."""
+
+    cv_id: int
+    status: str = "PENDING"
+    message: str = "CV upload accepted and is being processed in the background"

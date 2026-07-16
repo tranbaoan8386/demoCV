@@ -1,8 +1,8 @@
-from fastapi import APIRouter, UploadFile, File, Depends, HTTPException
+from fastapi import APIRouter, UploadFile, File, Depends, HTTPException, BackgroundTasks
 from sqlalchemy.orm import Session
 
 from app.core.database import SessionLocal
-from app.schemas.cv_schemas import CVUploadResponse
+from app.schemas.cv_schemas import CVUploadAcceptedResponse
 from app.services.cv_upload_service import CVUploadService
 from app.repositories.cv_repository import CVRepository
 from app.storage.minio_storage import MinIOStorage
@@ -27,48 +27,39 @@ def get_cv_service() -> CVUploadService:
     return CVUploadService(storage, repository)
 
 
-@router.post("/upload", response_model=CVUploadResponse)
+@router.post("/upload", response_model=CVUploadAcceptedResponse, status_code=202)
 async def upload_cv(
+    background_tasks: BackgroundTasks,
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
-    service: CVUploadService = Depends(get_db) if False else Depends(get_cv_service) # Giữ nguyên dependency gốc
-) -> CVUploadResponse:
+    service: CVUploadService = Depends(get_cv_service),
+) -> CVUploadAcceptedResponse:
     """
-    Upload a CV file
+    Upload a CV file asynchronously.
 
     - **file**: PDF file to upload (required)
-    - Returns: CV metadata with ID and storage location (Cleaned version)
+    - Returns: Accepted response with CV ID and pending status
     """
     try:
         content = await file.read()
 
-        cv = await service.upload_cv(
+        cv_id = await service.init_cv_record(
             db_session=db,
             file_content=content,
             original_filename=file.filename
         )
 
-        structured_payload = cv.structured_data or {}
+        background_tasks.add_task(service.process_cv_background, cv_id, background_tasks)
 
-        # ĐÃ LOẠI BỎ: Đoạn bóc tách biến cleaned_text thừa thãi ở đây
-
-        return CVUploadResponse(
-            id=cv.id,
-            original_filename=cv.original_filename,
-            object_name=cv.object_name,
-            status=cv.status,
-            created_at=cv.created_at,
-            # Chỉ trả về cục dữ liệu JSON bóc tách thuần túy
-            structured_data=structured_payload if isinstance(structured_payload, dict) else None
+        return CVUploadAcceptedResponse(
+            cv_id=cv_id,
+            status="PENDING",
+            message="CV upload accepted and is being processed in the background"
         )
 
     except ValueError as e:
-        # File validation errors
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
-        # Ép hệ thống in chi tiết lỗi ra Terminal của Docker
         import traceback
         traceback.print_exc()
-        
-        # Trả chi tiết lỗi về cho Swagger UI để dễ nhìn
         raise HTTPException(status_code=500, detail=f"System Error: {str(e)}")

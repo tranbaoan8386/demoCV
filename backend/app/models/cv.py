@@ -16,7 +16,7 @@ class CV(Base):
     id = Column(Integer, primary_key=True)
     original_filename = Column(String, nullable=False)
     object_name = Column(String, nullable=False)
-    status = Column(String, nullable=False, default="UPLOADED")
+    status = Column(String, nullable=False, default="PENDING")
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
 
     raw_text = Column(Text, nullable=True)

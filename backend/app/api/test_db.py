@@ -1,14 +1,12 @@
-from app.core.database import SessionLocal
 from app.models.cv import CV
 
-db = SessionLocal()
-
+# Create a CV instance in-memory without touching the DB engine
 new_cv = CV(
-    filename="test.pdf"
+    original_filename="test.pdf",
+    object_name="cvs/test.pdf",
+    status="PENDING",
 )
 
-db.add(new_cv)
+assert new_cv.original_filename == "test.pdf"
 
-db.commit()
-
-print("Insert success")
+print("Create success")

@@ -59,3 +59,19 @@ class MinIOStorage:
             return object_name
         except S3Error as e:
             raise Exception(f"Failed to upload file to MinIO: {str(e)}")
+
+    def download_file(self, object_name: str) -> bytes:
+        """
+        Download file from MinIO by object name.
+
+        Args:
+            object_name: Path in MinIO
+
+        Returns:
+            bytes: File content
+        """
+        try:
+            with self.client.get_object(self.bucket_name, object_name) as response:
+                return response.read()
+        except S3Error as e:
+            raise Exception(f"Failed to download file from MinIO: {str(e)}")
